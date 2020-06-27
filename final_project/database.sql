@@ -687,3 +687,62 @@ AFTER DELETE
 ON borrow_status
 FOR EACH ROW
 EXECUTE PROCEDURE log_borrow_status_delete();
+
+
+/* ___________________________________________ customer table triggers ___________________________________________ */
+
+
+CREATE OR REPLACE FUNCTION log_customer_insert()
+RETURNS trigger AS
+$BODY$
+BEGIN
+    INSERT INTO temp_log(table_name,event,record_pk)
+    VALUES('customer','INSERT',NEW.customer_id);
+	RETURN NEW;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER customer_insert
+AFTER INSERT
+ON customer
+FOR EACH ROW
+EXECUTE PROCEDURE log_customer_insert();
+
+
+
+CREATE OR REPLACE FUNCTION log_customer_update()
+RETURNS trigger AS
+$BODY$
+BEGIN
+    INSERT INTO temp_log(table_name,event,record_pk)
+    VALUES('customer','UPDATE',NEW.customer_id);
+	RETURN NEW;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER customer_update
+AFTER UPDATE
+ON customer
+FOR EACH ROW
+EXECUTE PROCEDURE log_customer_update();
+
+
+
+CREATE OR REPLACE FUNCTION log_customer_delete()
+RETURNS trigger AS
+$BODY$
+BEGIN
+    INSERT INTO temp_log(table_name,event,record_pk)
+    VALUES('customer','DELETE',OLD.customer_id);
+	RETURN NEW;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER customer_delete
+AFTER DELETE
+ON customer
+FOR EACH ROW
+EXECUTE PROCEDURE log_customer_delete();
