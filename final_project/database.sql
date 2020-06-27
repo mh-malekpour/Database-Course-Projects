@@ -628,3 +628,62 @@ AFTER DELETE
 ON book_item
 FOR EACH ROW
 EXECUTE PROCEDURE log_book_item_delete();
+
+
+/* ___________________________________________ borrow_status table triggers ___________________________________________ */
+
+
+CREATE OR REPLACE FUNCTION log_borrow_status_insert()
+RETURNS trigger AS
+$BODY$
+BEGIN
+    INSERT INTO temp_log(table_name,event,record_pk)
+    VALUES('borrow_status','INSERT',NEW.status_id);
+	RETURN NEW;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER borrow_status_insert
+AFTER INSERT
+ON borrow_status
+FOR EACH ROW
+EXECUTE PROCEDURE log_borrow_status_insert();
+
+
+
+CREATE OR REPLACE FUNCTION log_borrow_status_update()
+RETURNS trigger AS
+$BODY$
+BEGIN
+    INSERT INTO temp_log(table_name,event,record_pk)
+    VALUES('borrow_status','UPDATE',NEW.status_id);
+	RETURN NEW;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER borrow_status_update
+AFTER UPDATE
+ON borrow_status
+FOR EACH ROW
+EXECUTE PROCEDURE log_borrow_status_update();
+
+
+
+CREATE OR REPLACE FUNCTION log_borrow_status_delete()
+RETURNS trigger AS
+$BODY$
+BEGIN
+    INSERT INTO temp_log(table_name,event,record_pk)
+    VALUES('borrow_status','DELETE',OLD.status_id);
+	RETURN NEW;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER borrow_status_delete
+AFTER DELETE
+ON borrow_status
+FOR EACH ROW
+EXECUTE PROCEDURE log_borrow_status_delete();
