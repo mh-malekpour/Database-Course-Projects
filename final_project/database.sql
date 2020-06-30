@@ -100,7 +100,7 @@ CREATE TABLE "customer" (
 	"first_name" varchar(35) NOT NULL,
 	"last_name" varchar(35) NOT NULL,
 	"birth_date" DATE NOT NULL,
-	"rgistration_date" DATE NOT NULL,
+	"registration_date" DATE NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"phone_number" varchar(15) NOT NULL,
 	"address" TEXT NOT NULL,
