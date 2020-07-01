@@ -100,7 +100,7 @@ CREATE TABLE "customer" (
 	"first_name" varchar(35) NOT NULL,
 	"last_name" varchar(35) NOT NULL,
 	"birth_date" DATE NOT NULL,
-	"registration_date" DATE NOT NULL,
+	"registration_date" TIMESTAMP NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"phone_number" varchar(15) NOT NULL,
 	"address" TEXT NOT NULL,
@@ -139,23 +139,24 @@ CREATE TABLE "temp_log" (
 
 /* ___________________________________________ Add foreign keys ___________________________________________ */
 
-ALTER TABLE "book_item" ADD CONSTRAINT "book_item_fk0" FOREIGN KEY ("item_id") REFERENCES "book"("book_id");
+
+ALTER TABLE "book_item" ADD CONSTRAINT "book_item_fk0" FOREIGN KEY ("item_id") REFERENCES "book"("book_id") ON UPDATE CASCADE ON DELETE CASCADE;
 
 
-ALTER TABLE "author_book" ADD CONSTRAINT "author_book_fk0" FOREIGN KEY ("author_id") REFERENCES "author"("author_id");
-ALTER TABLE "author_book" ADD CONSTRAINT "author_book_fk1" FOREIGN KEY ("book_id") REFERENCES "book"("book_id");
+ALTER TABLE "author_book" ADD CONSTRAINT "author_book_fk0" FOREIGN KEY ("author_id") REFERENCES "author"("author_id") ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE "author_book" ADD CONSTRAINT "author_book_fk1" FOREIGN KEY ("book_id") REFERENCES "book"("book_id") ON UPDATE CASCADE ON DELETE CASCADE;
 
 
-ALTER TABLE "translator_book" ADD CONSTRAINT "translator_book_fk0" FOREIGN KEY ("translator_id") REFERENCES "translator"("translator_id");
-ALTER TABLE "translator_book" ADD CONSTRAINT "translator_book_fk1" FOREIGN KEY ("book_id") REFERENCES "book"("book_id");
+ALTER TABLE "translator_book" ADD CONSTRAINT "translator_book_fk0" FOREIGN KEY ("translator_id") REFERENCES "translator"("translator_id") ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE "translator_book" ADD CONSTRAINT "translator_book_fk1" FOREIGN KEY ("book_id") REFERENCES "book"("book_id") ON UPDATE CASCADE ON DELETE CASCADE;
 
 
-ALTER TABLE "genre_book" ADD CONSTRAINT "genre_book_fk0" FOREIGN KEY ("genre_id") REFERENCES "genre"("genre_id");
-ALTER TABLE "genre_book" ADD CONSTRAINT "genre_book_fk1" FOREIGN KEY ("book_id") REFERENCES "book"("book_id");
+ALTER TABLE "genre_book" ADD CONSTRAINT "genre_book_fk0" FOREIGN KEY ("genre_id") REFERENCES "genre"("genre_id") ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE "genre_book" ADD CONSTRAINT "genre_book_fk1" FOREIGN KEY ("book_id") REFERENCES "book"("book_id") ON UPDATE CASCADE ON DELETE CASCADE;
 
 
-ALTER TABLE "borrow_status" ADD CONSTRAINT "borrow_status_fk0" FOREIGN KEY ("item_id") REFERENCES "book_item"("item_id");
-ALTER TABLE "borrow_status" ADD CONSTRAINT "borrow_status_fk1" FOREIGN KEY ("customer_id") REFERENCES "customer"("customer_id");
+ALTER TABLE "borrow_status" ADD CONSTRAINT "borrow_status_fk0" FOREIGN KEY ("item_id") REFERENCES "book_item"("item_id") ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE "borrow_status" ADD CONSTRAINT "borrow_status_fk1" FOREIGN KEY ("customer_id") REFERENCES "customer"("customer_id") ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 /* ___________________________________________ book table triggers ___________________________________________ */

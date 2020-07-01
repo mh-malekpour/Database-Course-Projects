@@ -2,7 +2,7 @@
 
 
 CREATE TABLE "translator" (
-	"translator_id" serial NOT NULL,
+	"translator_id" integer NOT NULL UNIQUE,
 	"first_name" varchar(35) NOT NULL,
 	"last_name" varchar(35) NOT NULL,
 	"birth_date" DATE NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE "translator" (
 
 
 CREATE TABLE "translator_book" (
-	"id" serial NOT NULL,
+	"id" integer NOT NULL UNIQUE,
 	"translator_id" integer NOT NULL,
 	"book_id" integer NOT NULL,
 	"created_at" TIMESTAMP DEFAULT NOW(),
@@ -27,7 +27,7 @@ CREATE TABLE "translator_book" (
 
 
 CREATE TABLE "book_item" (
-	"item_id" serial NOT NULL,
+	"item_id" integer NOT NULL UNIQUE,
 	"is_borrow" bool NOT NULL,
 	"created_at" TIMESTAMP DEFAULT NOW(),
 	CONSTRAINT "book_item_pk" PRIMARY KEY ("item_id")
@@ -38,7 +38,7 @@ CREATE TABLE "book_item" (
 
 
 CREATE TABLE "borrow_status" (
-	"status_id" serial NOT NULL,
+	"status_id" integer NOT NULL UNIQUE,
 	"item_id" integer NOT NULL,
 	"customer_id" integer NOT NULL,
 	"borrowed_date" TIMESTAMP NOT NULL,
@@ -54,11 +54,11 @@ CREATE TABLE "borrow_status" (
 
 
 CREATE TABLE "customer" (
-	"customer_id" serial NOT NULL,
+	"customer_id" integer NOT NULL UNIQUE,
 	"first_name" varchar(35) NOT NULL,
 	"last_name" varchar(35) NOT NULL,
 	"birth_date" DATE NOT NULL,
-	"registration_date" DATE NOT NULL,
+	"registration_date" TIMESTAMP NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"phone_number" varchar(15) NOT NULL,
 	"address" TEXT NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE "customer" (
 
 
 CREATE TABLE "genre" (
-	"genre_id" serial NOT NULL,
+	"genre_id" integer NOT NULL UNIQUE,
 	"name" varchar(25) NOT NULL,
 	"created_at" TIMESTAMP DEFAULT NOW(),
 	CONSTRAINT "genre_pk" PRIMARY KEY ("genre_id")
@@ -82,7 +82,7 @@ CREATE TABLE "genre" (
 
 
 CREATE TABLE "genre_book" (
-	"id" serial NOT NULL,
+	"id" integer NOT NULL UNIQUE,
 	"genre_id" integer NOT NULL,
 	"book_id" integer NOT NULL,
 	"created_at" TIMESTAMP DEFAULT NOW(),
@@ -94,7 +94,7 @@ CREATE TABLE "genre_book" (
 
 
 CREATE TABLE "book" (
-	"book_id" serial NOT NULL,
+	"book_id" integer NOT NULL UNIQUE,
 	"ISBN" bigint NOT NULL UNIQUE,
 	"version" integer NOT NULL,
 	"title" varchar(255) NOT NULL,
@@ -111,7 +111,7 @@ CREATE TABLE "book" (
 
 
 CREATE TABLE "author_book" (
-	"id" serial NOT NULL,
+	"id" integer NOT NULL UNIQUE,
 	"author_id" integer NOT NULL,
 	"book_id" integer NOT NULL,
 	"created_at" TIMESTAMP DEFAULT NOW(),
@@ -123,7 +123,7 @@ CREATE TABLE "author_book" (
 
 
 CREATE TABLE "author" (
-	"author_id" serial NOT NULL,
+	"author_id" integer NOT NULL UNIQUE,
 	"first_name" varchar(35) NOT NULL,
 	"last_name" varchar(35) NOT NULL,
 	"birth_date" DATE NOT NULL,
@@ -138,29 +138,29 @@ CREATE TABLE "author" (
 /* ___________________________________________ Add foreign keys ___________________________________________ */
 
 
-ALTER TABLE "translator_book" ADD CONSTRAINT "translator_book_fk0" FOREIGN KEY ("translator_id") REFERENCES "translator"("translator_id");
-ALTER TABLE "translator_book" ADD CONSTRAINT "translator_book_fk1" FOREIGN KEY ("book_id") REFERENCES "book"("book_id");
+ALTER TABLE "translator_book" ADD CONSTRAINT "translator_book_fk0" FOREIGN KEY ("translator_id") REFERENCES "translator"("translator_id") ON UPDATE NO ACTION ON DELETE NO ACTION;
+ALTER TABLE "translator_book" ADD CONSTRAINT "translator_book_fk1" FOREIGN KEY ("book_id") REFERENCES "book"("book_id") ON UPDATE NO ACTION ON DELETE NO ACTION;
 
-ALTER TABLE "book_item" ADD CONSTRAINT "book_item_fk0" FOREIGN KEY ("item_id") REFERENCES "book"("book_id");
+ALTER TABLE "book_item" ADD CONSTRAINT "book_item_fk0" FOREIGN KEY ("item_id") REFERENCES "book"("book_id") ON UPDATE NO ACTION ON DELETE NO ACTION;
 
-ALTER TABLE "borrow_status" ADD CONSTRAINT "borrow_status_fk0" FOREIGN KEY ("item_id") REFERENCES "book_item"("item_id");
-ALTER TABLE "borrow_status" ADD CONSTRAINT "borrow_status_fk1" FOREIGN KEY ("customer_id") REFERENCES "customer"("customer_id");
-
-
-
-ALTER TABLE "genre_book" ADD CONSTRAINT "genre_book_fk0" FOREIGN KEY ("genre_id") REFERENCES "genre"("genre_id");
-ALTER TABLE "genre_book" ADD CONSTRAINT "genre_book_fk1" FOREIGN KEY ("book_id") REFERENCES "book"("book_id");
+ALTER TABLE "borrow_status" ADD CONSTRAINT "borrow_status_fk0" FOREIGN KEY ("item_id") REFERENCES "book_item"("item_id") ON UPDATE NO ACTION ON DELETE NO ACTION;
+ALTER TABLE "borrow_status" ADD CONSTRAINT "borrow_status_fk1" FOREIGN KEY ("customer_id") REFERENCES "customer"("customer_id") ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 
-ALTER TABLE "author_book" ADD CONSTRAINT "author_book_fk0" FOREIGN KEY ("author_id") REFERENCES "author"("author_id");
-ALTER TABLE "author_book" ADD CONSTRAINT "author_book_fk1" FOREIGN KEY ("book_id") REFERENCES "book"("book_id");
+
+ALTER TABLE "genre_book" ADD CONSTRAINT "genre_book_fk0" FOREIGN KEY ("genre_id") REFERENCES "genre"("genre_id") ON UPDATE NO ACTION ON DELETE NO ACTION;
+ALTER TABLE "genre_book" ADD CONSTRAINT "genre_book_fk1" FOREIGN KEY ("book_id") REFERENCES "book"("book_id") ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+
+ALTER TABLE "author_book" ADD CONSTRAINT "author_book_fk0" FOREIGN KEY ("author_id") REFERENCES "author"("author_id") ON UPDATE NO ACTION ON DELETE NO ACTION;
+ALTER TABLE "author_book" ADD CONSTRAINT "author_book_fk1" FOREIGN KEY ("book_id") REFERENCES "book"("book_id") ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 
 /* ___________________________________________ Create history tables ___________________________________________ */
 
 
 CREATE TABLE "book_history" (
-	"book_id" serial NOT NULL,
+	"book_id" integer NOT NULL UNIQUE,
 	"ISBN" bigint NOT NULL UNIQUE,
 	"version" integer NOT NULL,
 	"title" varchar(255) NOT NULL,
@@ -178,7 +178,7 @@ CREATE TABLE "book_history" (
 
 
 CREATE TABLE "author_book_history" (
-	"id" serial NOT NULL,
+	"id" integer NOT NULL UNIQUE,
 	"author_id" integer NOT NULL,
 	"book_id" integer NOT NULL,
 	"event" varchar(6) NOT NULL,
@@ -191,7 +191,7 @@ CREATE TABLE "author_book_history" (
 
 
 CREATE TABLE "translator_book_history" (
-	"id" serial NOT NULL,
+	"id" integer NOT NULL UNIQUE,
 	"translator_id" integer NOT NULL,
 	"book_id" integer NOT NULL,
 	"event" varchar(6) NOT NULL,
@@ -204,7 +204,7 @@ CREATE TABLE "translator_book_history" (
 
 
 CREATE TABLE "book_item_history" (
-	"item_id" serial NOT NULL,
+	"item_id" integer NOT NULL UNIQUE,
 	"is_borrow" bool NOT NULL,
 	"created_at" TIMESTAMP NOT NULL,
 	"event" varchar(6) NOT NULL,
@@ -217,7 +217,7 @@ CREATE TABLE "book_item_history" (
 
 
 CREATE TABLE "genre_book_history" (
-	"id" serial NOT NULL,
+	"id" integer NOT NULL UNIQUE,
 	"genre_id" integer NOT NULL,
 	"book_id" integer NOT NULL,
 	"event" varchar(6) NOT NULL,
@@ -230,7 +230,7 @@ CREATE TABLE "genre_book_history" (
 
 
 CREATE TABLE "borrow_status_history" (
-	"status_id" serial NOT NULL,
+	"status_id" integer NOT NULL UNIQUE,
 	"item_id" integer NOT NULL,
 	"customer_id" integer NOT NULL,
 	"borrowed_date" TIMESTAMP NOT NULL,
@@ -247,7 +247,7 @@ CREATE TABLE "borrow_status_history" (
 
 
 CREATE TABLE "translator_history" (
-	"translator_id" serial NOT NULL,
+	"translator_id" integer NOT NULL UNIQUE,
 	"first_name" varchar(35) NOT NULL,
 	"last_name" varchar(35) NOT NULL,
 	"birth_date" DATE NOT NULL,
@@ -261,7 +261,7 @@ CREATE TABLE "translator_history" (
 
 
 CREATE TABLE "author_history" (
-	"author_id" serial NOT NULL,
+	"author_id" integer NOT NULL UNIQUE,
 	"first_name" varchar(35) NOT NULL,
 	"last_name" varchar(35) NOT NULL,
 	"birth_date" DATE NOT NULL,
@@ -276,11 +276,11 @@ CREATE TABLE "author_history" (
 
 
 CREATE TABLE "customer_history" (
-	"customer_id" serial NOT NULL,
+	"customer_id" integer NOT NULL UNIQUE,
 	"first_name" varchar(35) NOT NULL,
 	"last_name" varchar(35) NOT NULL,
 	"birth_date" DATE NOT NULL,
-	"registration_date" DATE NOT NULL,
+	"registration_date" TIMESTAMP NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"phone_number" varchar(15) NOT NULL,
 	"address" TEXT NOT NULL,
@@ -294,7 +294,7 @@ CREATE TABLE "customer_history" (
 
 
 CREATE TABLE "genre_history" (
-	"genre_id" serial NOT NULL,
+	"genre_id" integer NOT NULL UNIQUE,
 	"name" varchar(25) NOT NULL,
 	"event" varchar(6) NOT NULL,
 	"occurred_at" TIMESTAMP DEFAULT NOW(),
